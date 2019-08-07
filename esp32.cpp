@@ -111,6 +111,7 @@ void handleSerialCommunication()
 // Implement (or refactor) struct WiFiParam { String SSID; uint8_t encryption; int32_t RSSI; };
 // Requires terminal colors defines
 // include algorithm, vector
+// Also include lambdas and operator overloads below the function (preferably into the header file)
 int scan()
 {
     int n;
@@ -148,3 +149,14 @@ int scan()
 
     return n;
 }
+
+auto less_by_name_signal = [](const WiFiParam& lhs, const WiFiParam& rhs)
+{
+	return std::tie(lhs.SSID, rhs.RSSI) < std::tie(rhs.SSID, lhs.RSSI);
+};
+auto WiFi_eq_by_SSID = [](const WiFiParam& lhs, const WiFiParam& rhs)
+{
+	return lhs.SSID == rhs.SSID;
+};
+
+inline bool operator==(const WiFiParam& lhs, const WiFiParam& rhs){ return !(lhs.SSID == rhs.SSID); }
